@@ -40,12 +40,12 @@ const Header = () => {
               className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <p
+                <label
+                  htmlFor="export-modal"
                   className="text-neutral dark:text-white"
-                  onClick={() => alertGeoJson()}
                 >
                   Export GeoJSON
-                </p>
+                </label>
               </li>
               <li>
                 <p className="text-neutral dark:text-white">Import GeoJSON</p>
