@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { selectListItem } from "../../store/main";
 import type { Item } from "../../store/types";
@@ -37,7 +37,7 @@ const ListItem = ({
     control,
     name: `list-item-properties-${item.id}`,
   });
-  const onSubmit = (data: Properties) =>
+  const onSubmit = (data: Properties) => {
     // Remember to add back in the map onl editable fields
     updateItem(item.id, {
       ...item,
@@ -49,8 +49,18 @@ const ListItem = ({
         radius: item.properties.radius,
       },
     });
+    setSaved(true);
+  };
 
   const [coodsOpen, setCoordsOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    // This should be a cancelable timeout
+    if (saved) {
+      setTimeout(() => setSaved(false), 3000);
+    }
+  }, [saved]);
 
   return (
     <div
@@ -190,6 +200,27 @@ const ListItem = ({
                 )}
               </div>
               <div className="card-actions justify-end">
+                {saved && (
+                  <div
+                    className="badge badge-md badge-success gap-2 mt-[6px] cursor-pointer"
+                    onClick={() => setSaved(false)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      className="inline-block w-4 h-4 stroke-current"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      ></path>
+                    </svg>
+                    Saved Properties
+                  </div>
+                )}
                 <input type="submit" className="btn btn-accent btn-sm" />
               </div>
             </form>
