@@ -5,6 +5,7 @@ import "@geoman-io/leaflet-geoman-free";
 import parkMapUrl from "./park-map.jpg";
 import { addListeners, handlePMCreate } from "./mapConnector";
 import type { GeomanExtraLayerProps } from "../store/types";
+import { mapStore } from "../store/main";
 
 let mapRef: Map | null = null;
 
@@ -80,6 +81,9 @@ const initializeMap = async ({
     handlePMCreate(shape, layer as Layer & GeomanExtraLayerProps);
     addListeners(mapRef!, layer as Layer & GeomanExtraLayerProps);
   });
+
+  // Let state know that the map has been initialized
+  mapStore.setState({ mapInitialized: true });
 
   return mapRef;
 };

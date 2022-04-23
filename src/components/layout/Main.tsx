@@ -3,7 +3,7 @@ import initializeMap from "../../helpers/initializeMap";
 import { mapStore } from "../../store/main";
 
 const Main = () => {
-  const { mapInitialized, setMapInitialized } = mapStore((state) => state);
+  const mapInitialized = mapStore((state) => state.mapInitialized);
   return (
     <div className="flex flex-col md:flex-row h-auto md:h-full">
       <div className="w-full md:w-3/5 h-96 md:h-full bg-neutral-focus">
@@ -13,10 +13,7 @@ const Main = () => {
         >
           {!mapInitialized && (
             <h3
-              onClick={() => {
-                initializeMap({});
-                setMapInitialized(true);
-              }}
+              onClick={() => initializeMap({})}
               className="text-3xl text-center cursor-pointer hover:text-white transition-all duration-200"
             >
               Your map will appear here, <br />
