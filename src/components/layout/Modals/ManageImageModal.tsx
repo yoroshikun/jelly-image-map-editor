@@ -1,79 +1,71 @@
-import { GeoJsonObject } from "geojson";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import initializeMap from "../../../helpers/initializeMap";
-import { addGeoJSON } from "../../../helpers/mapConnector";
-// @ts-ignore
-import geoJSONValidation from "../../../helpers/validateGeoJSON";
 
-const ImportModal = () => {
-  const [preppedGeoJSON, setPreppedGeoJSON] = useState<GeoJsonObject | null>(
-    null
-  );
+// TODO: Apply validation to the image url https://stackoverflow.com/questions/32222786/file-upload-check-if-valid-image
+
+const ManageImageModal = () => {
+  const [preppedImageURL, setPreppedImageURL] = useState<string | null>(null);
   const [error, setError] = useState("");
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
-      setError("This file type is not supported, please use a .json");
+      setError("This file type is not supported, please use a image/*");
       return;
     }
-    // Read contents of file and save to state
-    const reader = new FileReader();
 
-    // Read and decode json
-    reader.onabort = () => setError("File reading was aborted");
-    reader.onerror = () => setError("File reading has failed");
-    reader.onload = (event) => {
-      try {
-        const json = reader.result && JSON.parse(reader.result as string);
-        const trace = geoJSONValidation(json, true);
+    // Make a URL from the file
+    const url = URL.createObjectURL(acceptedFiles[0]);
 
-        if (trace.length !== 0) {
-          throw new Error(trace.join("\n"));
-        }
-
-        setPreppedGeoJSON(json);
-        setError("");
-      } catch (e: any) {
-        setError("An error ocurred when parsing the geoJSON: " + e.message);
-      }
-    };
-
-    reader.readAsText(acceptedFiles[0]);
+    setPreppedImageURL(url);
   }, []);
   const { getRootProps, getInputProps, isDragActive, isDragReject } =
     useDropzone({
       maxFiles: 1,
       onDrop,
-      accept: "application/json",
+      accept: "image/*",
     });
 
-  const handleImport = useCallback(async () => {
+  const handleUpdateImage = useCallback(async () => {
     try {
-      if (preppedGeoJSON) {
-        const map = await initializeMap({});
-        addGeoJSON(map, preppedGeoJSON);
+      if (preppedImageURL) {
+        await initializeMap({ url: preppedImageURL });
       }
     } catch (error: any) {
       setError(error.message);
     }
-  }, [preppedGeoJSON]);
+  }, [preppedImageURL]);
 
   return (
     <>
-      <input type="checkbox" id="import-modal" className="modal-toggle" />
-      <label htmlFor="import-modal" className="modal cursor-pointer z-[1000]">
+      <input type="checkbox" id="manage-image-modal" className="modal-toggle" />
+      <label
+        htmlFor="manage-image-modal"
+        className="modal cursor-pointer z-[1000]"
+      >
         <label className="modal-box w-11/12 max-w-3xl relative" htmlFor="">
           <label
-            htmlFor="import-modal"
+            htmlFor="manage-image-modal"
             className="btn btn-sm btn-circle absolute right-4 top-4"
           >
             ✕
           </label>
-          <h3 className="text-lg font-bold mb-4">Import geoJSON</h3>
-          {preppedGeoJSON ? (
-            <pre className="bg-neutral rounded-lg p-4 max-h-48 overflow-y-scroll select-all text-white">
-              <code>{JSON.stringify(preppedGeoJSON, null, 2)}</code>
-            </pre>
+          <h3 className="text-lg font-bold">Manage Image</h3>
+          <p className="text-sm text-grey-300 my-4">
+            Warning: By updating your image your geoJSON will be removed, please
+            export your geoJSON to avoid data loss.
+          </p>
+          <input
+            type="text"
+            placeholder="URL"
+            className="input input-bordered w-full mb-4"
+            disabled={preppedImageURL?.startsWith("blob:")}
+            value={preppedImageURL || ""}
+            onChange={(e) => setPreppedImageURL(e.target.value)}
+          ></input>
+          {preppedImageURL ? (
+            <div className="w-2/3 mx-auto">
+              <img src={preppedImageURL} className="w-full " />
+            </div>
           ) : (
             <div
               className={`flex items-center justify-center h-48 dark:bg-neutral rounded-xl border-4 border-dashed hover:border-accent transition-all duration-200 
@@ -114,20 +106,20 @@ const ImportModal = () => {
             </div>
           )}
           <div className="modal-action">
-            {preppedGeoJSON && (
+            {preppedImageURL && (
               <button
                 className="btn btn-error"
-                onClick={() => setPreppedGeoJSON(null)}
+                onClick={() => setPreppedImageURL(null)}
               >
                 Clear
               </button>
             )}
             <button
               className="btn"
-              disabled={!preppedGeoJSON}
-              onClick={handleImport}
+              disabled={!preppedImageURL}
+              onClick={handleUpdateImage}
             >
-              Import
+              Update
             </button>
           </div>
         </label>
@@ -136,4 +128,4 @@ const ImportModal = () => {
   );
 };
 
-export default ImportModal;
+export default ManageImageModal;
