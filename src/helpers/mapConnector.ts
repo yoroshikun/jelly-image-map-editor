@@ -1,5 +1,5 @@
 // Series of helpers that connect native map js to store
-import { Map, geoJSON, Layer, LatLng, latLng } from "leaflet";
+import { Map, geoJSON, Layer, LatLng } from "leaflet";
 import { GeoJsonObject } from "geojson";
 
 import type { Item, GeomanExtraLayerProps } from "../store/types";
@@ -62,13 +62,20 @@ const makeItem = (shape: string, layer: Layer & GeomanExtraLayerProps) => {
 
 // Actions
 const addGeoJSON = (map: Map, geoJson: GeoJsonObject) => {
-  geoJSON(geoJson, {
-    onEachFeature: (feature, layer: Layer & GeomanExtraLayerProps) => {
-      const item = makeItem(feature.geometry.type, layer);
+  const geoJSONLayer = geoJSON(geoJson).addTo(map);
+
+  // Get all created shapes and add them to the list
+  (geoJSONLayer.getLayers() as (Layer & GeomanExtraLayerProps)[]).forEach(
+    (layer) => {
+      const item = makeItem(layer.feature?.geometry.type || "Polygon", layer);
+
+      // Merge in properties from the layer
+      item.properties = { ...item.properties, ...layer.feature?.properties };
+
       list.setState({ list: [...list.getState().list, item] });
       addListeners(map, layer);
-    },
-  }).addTo(map);
+    }
+  );
 };
 
 // Listeners
