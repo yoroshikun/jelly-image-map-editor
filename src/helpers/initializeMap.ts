@@ -2,10 +2,10 @@
 
 import { Map, map, CRS, LatLngBounds, imageOverlay, Layer } from "leaflet";
 import "@geoman-io/leaflet-geoman-free";
+import parkMapUrl from "./park-map.jpg";
 import { addListeners, handlePMCreate } from "./mapConnector";
 import type { GeomanExtraLayerProps } from "../store/types";
 
-// We always expect this to exist in some form or another
 let mapRef: Map | null = null;
 
 const getImageDimensions = (url: string) =>
@@ -30,12 +30,13 @@ const initializeMap = async ({
   maxZoom,
   zoom,
 }: {
-  url: string;
+  url?: string;
   minZoom?: number;
   maxZoom?: number;
   zoom?: number;
 }) => {
   // Merge defaults
+  if (!url) url = parkMapUrl;
   if (!minZoom) minZoom = -1;
   if (!maxZoom) maxZoom = 3;
   if (!zoom) zoom = -1;
@@ -43,6 +44,11 @@ const initializeMap = async ({
   const mapElement = document.getElementById("map")! as HTMLDivElement;
   // Remove previous map if there was one
   if (mapRef !== null && mapElement) {
+    mapRef.off();
+    mapRef.remove();
+    mapRef.invalidateSize();
+    mapRef = null;
+
     // remove the map and recreate
     mapElement.innerHTML = "";
   }

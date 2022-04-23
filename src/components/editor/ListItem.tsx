@@ -183,8 +183,8 @@ const ListItem = ({
                 </div>
                 {coodsOpen && (
                   <div className="collapse-content">
-                    <pre className="whitespace-pre bg-neutral rounded-lg p-2 text-white text-sm">
-                      {JSON.stringify(item.geometry.coordinates)}
+                    <pre className="whitespace-pre-wrap bg-neutral rounded-lg p-2 text-white text-sm select-all overflow-y-scroll max-h-20">
+                      <code>{JSON.stringify(item.geometry.coordinates)}</code>
                     </pre>
                   </div>
                 )}

@@ -48,7 +48,12 @@ const Header = () => {
                 </label>
               </li>
               <li>
-                <p className="text-neutral dark:text-white">Import GeoJSON</p>
+                <label
+                  htmlFor="import-modal"
+                  className="text-neutral dark:text-white"
+                >
+                  Import GeoJSON
+                </label>
               </li>
             </ul>
           </div>

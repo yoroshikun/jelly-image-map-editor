@@ -30,6 +30,15 @@ const list = create<{
     })),
 }));
 
+const mapStore = create<{
+  mapInitialized: boolean;
+  setMapInitialized: (mapInitialized: boolean) => void;
+}>((set) => ({
+  mapInitialized: false,
+  setMapInitialized: (mapInitialized: boolean) =>
+    set((state) => ({ mapInitialized })),
+}));
+
 const selectListItem = (id: number) => {
   // Get previous selected item
   const prevSelectedId = list.getState().selected;
@@ -61,4 +70,4 @@ const selectListItem = (id: number) => {
   });
 };
 
-export { list, selectListItem };
+export { list, selectListItem, mapStore };
