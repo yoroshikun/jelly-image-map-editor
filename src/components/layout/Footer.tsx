@@ -2,9 +2,25 @@ const Footer = () => (
   <footer className="footer items-center p-4 bg-neutral text-neutral-content">
     <div className="items-center grid-flow-col">
       <p>
-        Project by Yoroshi - Made with {`<3`} and <a className="link">React</a>,{" "}
-        <a className="link">Leaflet</a>, <a className="link">Geoman</a> and{" "}
-        <a className="link">Daisy UI</a>
+        Project by Yoroshi - Made with {`<3`} - Thanks to{" "}
+        <a href="https://reactjs.org/" className="link hover:text-accent">
+          React
+        </a>
+        ,{" "}
+        <a href="https://leafletjs.com/" className="link hover:text-accent">
+          Leaflet
+        </a>
+        ,{" "}
+        <a
+          href="https://geoman.io/leaflet-geoman"
+          className="link hover:text-accent"
+        >
+          Geoman
+        </a>{" "}
+        and{" "}
+        <a href="https://daisyui.com/" className="link hover:text-accent">
+          Daisy UI
+        </a>
       </p>
     </div>
     <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
@@ -14,7 +30,7 @@ const Footer = () => (
           width="38"
           height="38"
           viewBox="0 0 24 16"
-          className="fill-current"
+          className="fill-current hover:fill-accent"
         >
           <path
             xmlns="http://www.w3.org/2000/svg"
