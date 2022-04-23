@@ -14,7 +14,7 @@ const Main = () => {
           {!mapInitialized && (
             <h3
               onClick={() => initializeMap({})}
-              className="text-3xl text-center cursor-pointer hover:text-white transition-all duration-200"
+              className="text-3xl text-center cursor-pointer text-gray-400 hover:text-white transition-all duration-200"
             >
               Your map will appear here, <br />
               Click here to initialize a default one to play with
