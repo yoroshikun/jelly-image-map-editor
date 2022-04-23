@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import initializeMap from "../../../helpers/initializeMap";
 
@@ -32,6 +32,13 @@ const ManageImageModal = () => {
       }
     } catch (error: any) {
       setError(error.message);
+    }
+  }, [preppedImageURL]);
+
+  // Revoke url to prevent memory leak
+  useEffect(() => {
+    if (preppedImageURL && preppedImageURL.startsWith("blob:")) {
+      URL.revokeObjectURL(preppedImageURL);
     }
   }, [preppedImageURL]);
 
