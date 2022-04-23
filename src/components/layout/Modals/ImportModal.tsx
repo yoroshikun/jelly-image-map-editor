@@ -61,7 +61,7 @@ const ImportModal = () => {
   return (
     <>
       <input type="checkbox" id="import-modal" className="modal-toggle" />
-      <label htmlFor="import-modal" className="modal cursor-pointer">
+      <label htmlFor="import-modal" className="modal cursor-pointer z-[1000]">
         <label className="modal-box w-11/12 max-w-3xl relative" htmlFor="">
           <label
             htmlFor="import-modal"

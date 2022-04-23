@@ -8,7 +8,7 @@ const List = () => {
 
   if (itemList && itemList.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-full min-h-[300px]">
         <div className="mt-2 text-center">
           <p>
             Looks like you have no items,

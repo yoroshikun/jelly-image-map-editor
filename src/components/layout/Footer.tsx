@@ -1,7 +1,7 @@
 const Footer = () => (
   <footer className="footer items-center p-4 bg-neutral text-neutral-content">
     <div className="items-center grid-flow-col">
-      <p>
+      <p className="text-center sm:text-left">
         Project by Yoroshi - Made with {`<3`} - Thanks to{" "}
         <a href="https://reactjs.org/" className="link hover:text-accent">
           React
@@ -23,7 +23,7 @@ const Footer = () => (
         </a>
       </p>
     </div>
-    <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+    <div className="grid-flow-col gap-4 w-full justify-center md:justify-end md:place-self-center md:justify-self-end">
       <a href="https://github.com/yoroshikun">
         <svg
           xmlns="http://www.w3.org/2000/svg"

@@ -38,6 +38,7 @@ const Header = () => {
             <ul
               tabIndex={0}
               className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+              style={{zIndex: 1000}}
             >
               <li>
                 <label

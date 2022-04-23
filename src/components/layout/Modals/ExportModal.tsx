@@ -25,7 +25,7 @@ const ExportModal = () => {
   return (
     <>
       <input type="checkbox" id="export-modal" className="modal-toggle" />
-      <label htmlFor="export-modal" className="modal cursor-pointer">
+      <label htmlFor="export-modal" className="modal cursor-pointer z-[1000]">
         <label className="modal-box w-11/12 max-w-3xl relative" htmlFor="">
           <label
             htmlFor="export-modal"
