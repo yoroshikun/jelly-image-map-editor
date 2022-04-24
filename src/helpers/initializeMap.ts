@@ -30,11 +30,17 @@ const initializeMap = async ({
   minZoom,
   maxZoom,
   zoom,
+  center,
+  height,
+  width,
 }: {
   url?: string;
   minZoom?: number;
   maxZoom?: number;
   zoom?: number;
+  center?: [number, number];
+  height?: number;
+  width?: number;
 }) => {
   // Merge defaults
   if (!url) url = parkMapUrl;
@@ -54,7 +60,11 @@ const initializeMap = async ({
     mapElement.innerHTML = "";
   }
   // Get the img height and width to calculate the map size and position
-  const { w, h } = await getImageDimensions(url);
+  let { w, h } = await getImageDimensions(url);
+
+  // Override the height and width if they are provided
+  if (height) h = height;
+  if (width) w = width;
 
   // Create the map
   mapRef = map(mapElement, {
@@ -62,7 +72,7 @@ const initializeMap = async ({
     minZoom,
     maxZoom,
     zoom,
-    center: [h, w],
+    center: center || [h, w],
   });
 
   // Add the image to the map
