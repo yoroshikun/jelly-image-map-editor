@@ -69,7 +69,15 @@ const ManageImageModal = () => {
             value={preppedImageURL || ""}
             onChange={(e) => setPreppedImageURL(e.target.value)}
           ></input>
-          {preppedImageURL ? (
+          {preppedImageURL &&
+          // This can and will be replaced with an image check in comment above
+          (preppedImageURL.startsWith("blob:") ||
+            preppedImageURL.endsWith(".png") ||
+            preppedImageURL.endsWith(".jpg") ||
+            preppedImageURL.endsWith(".jpeg") ||
+            preppedImageURL.endsWith(".avif") ||
+            preppedImageURL.endsWith(".webp") ||
+            preppedImageURL.endsWith(".svg")) ? (
             <div className="w-2/3 mx-auto">
               <img src={preppedImageURL} className="w-full " />
             </div>
