@@ -1,11 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import initializeMap from "../../../helpers/initializeMap";
+import { useMapStore, useListStore } from "../../../store/main";
+import { MapOptions } from "../../../store/types";
 
 // TODO: Apply validation to the image url https://stackoverflow.com/questions/32222786/file-upload-check-if-valid-image
 
 const ManageImageModal = () => {
-  const [preppedImageURL, setPreppedImageURL] = useState<string | null>(null);
+  const [preppedImageURL, setPreppedImageURL] = useState<string | null>(() => {
+    const mapOptions = localStorage.getItem("map-options");
+    if (mapOptions) {
+      const mapOptionsJSON = JSON.parse(mapOptions) as MapOptions;
+      return mapOptionsJSON.url || null;
+    }
+    return null;
+  });
   const [error, setError] = useState("");
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) {
@@ -28,7 +37,23 @@ const ManageImageModal = () => {
   const handleUpdateImage = useCallback(async () => {
     try {
       if (preppedImageURL) {
+        // Before re-initializing the map, remove the old list data as per warning
+        useListStore.setState({ list: [], selected: null, tainted: true });
+        localStorage.removeItem("list-store");
+
         await initializeMap({ url: preppedImageURL });
+
+        // We only want to set the url setting if not a blob,
+        // blobs are removed when page reloads as by the revoke object url
+        if (!preppedImageURL.startsWith("blob:")) {
+          useMapStore.setState({
+            options: {
+              ...useMapStore.getState().options,
+              url: preppedImageURL,
+            },
+            tainted: true,
+          });
+        }
       }
     } catch (error: any) {
       setError(error.message);

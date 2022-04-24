@@ -1,10 +1,10 @@
-import { list } from "../../store/main";
+import { useListStore } from "../../store/main";
 import ListItem from "./ListItem";
 
 const List = () => {
-  const itemList = list((state) => state.list);
-  const selected = list((state) => state.selected);
-  const updateItem = list((state) => state.updateItem);
+  const itemList = useListStore((state) => state.list);
+  const selected = useListStore((state) => state.selected);
+  const updateItem = useListStore((state) => state.updateItem);
 
   if (itemList && itemList.length === 0) {
     return (

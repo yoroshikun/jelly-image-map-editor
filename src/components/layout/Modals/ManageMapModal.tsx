@@ -1,8 +1,9 @@
-import { useCallback, useMemo } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import initializeMap from "../../../helpers/initializeMap";
+import { useListStore, useMapStore } from "../../../store/main";
+import { MapOptions } from "../../../store/types";
 
-interface MapOptions {
+interface MapOptionsForm {
   height: number;
   width: number;
   zoom: number;
@@ -17,26 +18,53 @@ const ManageMapModal = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<MapOptions>({
-    defaultValues: {
-      zoom: -1,
-      maxZoom: 3,
-      minZoom: -1,
-    },
+  } = useForm<MapOptionsForm>({
+    defaultValues: (() => {
+      const mapOptions = localStorage.getItem("map-options");
+      if (mapOptions) {
+        const mapOptionsJSON = JSON.parse(mapOptions) as MapOptions;
+
+        return {
+          height: mapOptionsJSON.height,
+          width: mapOptionsJSON.width,
+          zoom: mapOptionsJSON.zoom || -1,
+          centerX: mapOptionsJSON.center?.[0],
+          centerY: mapOptionsJSON.center?.[1],
+          maxZoom: mapOptionsJSON.maxZoom || 3,
+          minZoom: mapOptionsJSON.minZoom || -1,
+        };
+      }
+      return {
+        zoom: -1,
+        maxZoom: 3,
+        minZoom: -1,
+      };
+    })(),
   });
-  const onSubmit: SubmitHandler<MapOptions> = async (data) => {
-    // Reinitialize map with new options
-    await initializeMap({
-      height: data.height,
-      width: data.width,
+  const onSubmit: SubmitHandler<MapOptionsForm> = async (data) => {
+    const options = {
       zoom: data.zoom,
-      ...(data.centerX &&
-        data.centerY && { center: [data.centerX, data.centerY] }),
       maxZoom: data.maxZoom,
       minZoom: data.minZoom,
-    });
+      ...(data.centerX &&
+        data.centerY && {
+          center: [data.centerX, data.centerY] as [number, number],
+        }),
+      ...(data.height && { height: data.height }),
+      ...(data.width && { width: data.width }),
+    };
 
-    // TODO: Save map options to local storage
+    // Reset the list store in preparation for reinitializing the map
+    useListStore.setState({ list: [], selected: null, tainted: false });
+
+    // Reinitialize map with new options
+    await initializeMap(options);
+
+    // Update map options in store
+    useMapStore.setState({
+      options: { ...useMapStore.getState().options, ...options },
+      tainted: true,
+    });
   };
 
   return (
