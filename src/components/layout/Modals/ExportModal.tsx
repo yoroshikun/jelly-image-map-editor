@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from "react";
 import generateGeoJSON from "../../../helpers/generateGeoJSON";
-import { list } from "../../../store/main";
+import { useListStore } from "../../../store/main";
 
 const ExportModal = () => {
-  const itemList = list((state) => state.list);
+  const itemList = useListStore((state) => state.list);
 
   const geoJSON = useMemo(() => generateGeoJSON(itemList), [itemList]);
 

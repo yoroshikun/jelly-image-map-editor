@@ -3,7 +3,7 @@ import { Map, geoJSON, Layer, LatLng } from "leaflet";
 import { GeoJsonObject } from "geojson";
 
 import type { Item, GeomanExtraLayerProps } from "../store/types";
-import { list, selectListItem } from "../store/main";
+import { useListStore, selectListItem, useMapStore } from "../store/main";
 
 // Helpers
 
@@ -72,10 +72,12 @@ const addGeoJSON = (map: Map, geoJson: GeoJsonObject) => {
       // Merge in properties from the layer
       item.properties = { ...item.properties, ...layer.feature?.properties };
 
-      list.setState({ list: [...list.getState().list, item] });
+      useListStore.setState({ list: [...useListStore.getState().list, item] });
       addListeners(map, layer);
     }
   );
+
+  useMapStore.setState({ tainted: true });
 };
 
 // Listeners
@@ -114,13 +116,14 @@ const addListeners = (map: Map, layer: Layer & GeomanExtraLayerProps) => {
   layer.on(
     "pm:remove",
     ({ layer }: { layer: Layer & GeomanExtraLayerProps }) => {
-      list.setState({
-        list: list
+      useListStore.setState({
+        list: useListStore
           .getState()
           .list.filter(
             (item) =>
               item.id !== (layer.feature?.properties?.id || layer._leaflet_id)
           ),
+        tainted: true,
       });
     }
   );
@@ -141,7 +144,10 @@ const handlePMCreate = (
 ) => {
   const newItem = makeItem(shape, layer);
 
-  list.setState({ list: [...list.getState().list, newItem] });
+  useListStore.setState({
+    list: [...useListStore.getState().list, newItem],
+    tainted: true,
+  });
 };
 
 const handlePMEdit = (
@@ -153,8 +159,8 @@ const handlePMEdit = (
 
   // PrevId override (this can be condensed)
   if (prevId) {
-    list.setState({
-      list: list.getState().list.map((item) =>
+    useListStore.setState({
+      list: useListStore.getState().list.map((item) =>
         item.id === prevId
           ? {
               ...newItem,
@@ -162,11 +168,12 @@ const handlePMEdit = (
             }
           : item
       ),
+      tainted: true,
     });
   } else {
     // Replace item in list
-    list.setState({
-      list: list.getState().list.map((item) =>
+    useListStore.setState({
+      list: useListStore.getState().list.map((item) =>
         item.id === newItem.id
           ? {
               ...newItem,
@@ -174,6 +181,7 @@ const handlePMEdit = (
             }
           : item
       ),
+      tainted: true,
     });
   }
 };

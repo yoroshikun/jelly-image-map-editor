@@ -25,3 +25,13 @@ export interface GeomanExtraLayerProps {
   };
   // TODO: Add all other properties
 }
+
+export interface MapOptions {
+  url?: string;
+  minZoom?: number;
+  maxZoom?: number;
+  zoom?: number;
+  center?: [number, number];
+  height?: number;
+  width?: number;
+}

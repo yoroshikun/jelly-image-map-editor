@@ -1,10 +1,106 @@
 import ThemeChanger from "./../partials/ThemeChanger";
+import { useMapStore, useListStore } from "../../store/main";
 
 const Header = () => {
+  const mapTainted = useMapStore((state) => state.tainted);
+  const listTainted = useListStore((state) => state.tainted);
+  const saveMapStore = useMapStore((state) => state.saveMapStore);
+  const saveListStore = useListStore((state) => state.saveListStore);
+
   return (
     <header className="header items-center p-4 bg-neutral text-neutral-content">
       <div className="flex justify-between w-full items-center">
         <div className="flex-1 font-bold text-xl">IMEditor</div>
+        {mapTainted ? (
+          <div
+            className="tooltip tooltip-warning tooltip-bottom z-[1000]"
+            data-tip="You have unsaved map options, click to save locally now"
+            onClick={() => saveMapStore()}
+          >
+            <button className="btn btn-circle btn-sm btn-warning mr-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="stroke-current flex-shrink-0 w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        ) : (
+          <div
+            className="tooltip tooltip-success tooltip-bottom mr-4 z-[1000]"
+            data-tip="All map options have been saved locally, click to purge local storage"
+            onClick={() => localStorage.removeItem("map-options")}
+          >
+            <button className="btn btn-circle btn-sm btn-success">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current flex-shrink-0 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
+        {listTainted ? (
+          <div
+            className="tooltip tooltip-warning tooltip-bottom mr-4 z-[1000]"
+            data-tip="You have unsaved list modifications, click to save locally now"
+            onClick={() => saveListStore()}
+          >
+            <button className="btn btn-circle btn-sm btn-warning">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="stroke-current flex-shrink-0 w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        ) : (
+          <div
+            className="tooltip tooltip-success tooltip-bottom mr-4 z-[1000]"
+            data-tip="All list changes have been saved locally, click to purge local storage"
+            onClick={() => localStorage.removeItem("list-store")}
+          >
+            <button className="btn btn-circle btn-sm btn-success">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current flex-shrink-0 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
         <button className="btn btn-square btn-ghost">
           <ThemeChanger />
         </button>

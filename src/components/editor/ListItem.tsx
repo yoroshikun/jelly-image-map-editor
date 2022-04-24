@@ -218,7 +218,7 @@ const ListItem = ({
                         d="M6 18L18 6M6 6l12 12"
                       ></path>
                     </svg>
-                    Saved Properties
+                    Temp Saved Properties
                   </div>
                 )}
                 <input type="submit" className="btn btn-accent btn-sm" />
