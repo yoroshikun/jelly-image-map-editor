@@ -97,6 +97,63 @@ Jelly supports persistance of your session so that you don't lose your progress 
 
 If at any point you want to purge the local state you can click on the alerts in their success mode
 
+### Adding exported GeoJSON to your own map
+
+The basic recipe for adding the exported geoJSON to you own map is the following: (written in typescript)
+
+```ts
+import type { Map } from "leaflet";
+import {
+  Circle,
+  CRS,
+  geoJSON,
+  imageOverlay,
+  LatLngBounds,
+  map,
+  Marker,
+} from "leaflet";
+
+import geoJson from "./geojson.json"; // your geoJSON
+
+let mapRef: Map | null = null;
+const mapElement = document.getElementById("map")!;
+
+const h = 100,
+  w = 100; // You need to know your images size
+const url = ""; // Your image url
+
+// Create the map
+mapRef = map(mapElement, {
+  crs: CRS.Simple,
+  minZoom: -1,
+  maxZoom: 3,
+  zoom: -1,
+  center: [h, w],
+});
+
+// Add the image to the map
+const southWest = mapRef.unproject([0, h], 0);
+const northEast = mapRef.unproject([w, 0], 0);
+const bounds = new LatLngBounds(southWest, northEast);
+
+imageOverlay(url, bounds).addTo(mapRef);
+
+mapRef.setMaxBounds(bounds);
+
+// Add your geoJSON here
+if (geoJson) {
+  geoJSON(geoJson, {
+    pointToLayer: (feature, latlng) => {
+      if (feature.properties.radius) {
+        return new Circle(latlng, feature.properties.radius);
+      } else {
+        return new Marker(latlng);
+      }
+    },
+  }).addTo(mapRef);
+}
+```
+
 ### Contributing
 
 Contributors are welcome!

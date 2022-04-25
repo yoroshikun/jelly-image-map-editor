@@ -31,7 +31,7 @@ const Footer = () => (
       </p>
     </div>
     <div className="grid-flow-col gap-4 w-full justify-center md:justify-end md:place-self-center md:justify-self-end">
-      <a href="https://github.com/yoroshikun/jelly-map-image-editor">
+      <a href="https://github.com/yoroshikun/jelly-image-map-editor">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="38"
