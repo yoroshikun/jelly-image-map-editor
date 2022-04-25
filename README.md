@@ -98,6 +98,25 @@ yarn
 
 Please follow [conventional-commits](https://www.conventionalcommits.org/en/v1.0.0/) for the best practices of writing commits.
 
+#### Troubleshooting
+
+If you have troubles importing the geoJSON you may need to add a converter for circles and markers. (code below is in typescript)
+
+```ts
+import { geoJSON, Circle, Marker } from 'leaflet';
+
+const addGeoJSON = (map: Map, geoJson: GeoJsonObject) => {
+  const geoJSONLayer = geoJSON(geoJson, {
+    pointToLayer: (feature, latlng) => {
+      if (feature.properties.radius) {
+        return new Circle(latlng, feature.properties.radius);
+      } else {
+        return new Marker(latlng);
+      }
+    },
+  }).addTo(map);
+```
+
 ### Special Thanks
 
 - [Geoman](https://geoman.io/)
