@@ -82,7 +82,7 @@ Exporting and Downloading a generated list of features as GeoJSON is support by 
 #### Import GeoJSON
 
 <p align="center">
-  <img src="https://github.com/yoroshikun/jelly-image-map-editor/raw/main/public/promo-gifs/export-geojson.gif" />
+  <img src="https://github.com/yoroshikun/jelly-image-map-editor/raw/main/public/promo-gifs/import-geojson.gif" />
 </p>
 
 Importing geoJSON by uploading a file is supported though clicking the import icon in the top right of the UI.
