@@ -16,6 +16,13 @@ const Footer = () => (
           className="link hover:text-accent"
         >
           Geoman
+        </a>
+        ,{" "}
+        <a
+          href="https://zustand-demo.pmnd.rs/"
+          className="link hover:text-accent"
+        >
+          Zustand
         </a>{" "}
         and{" "}
         <a href="https://daisyui.com/" className="link hover:text-accent">

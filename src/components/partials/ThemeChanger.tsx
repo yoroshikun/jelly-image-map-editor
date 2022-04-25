@@ -5,7 +5,7 @@ const ThemeChanger = () => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    const localTheme = localStorage.getItem("imeditor-theme");
+    const localTheme = localStorage.getItem("theme");
     if (localTheme) {
       setTheme(localTheme);
       setIsDark(localTheme === "dark");
@@ -20,13 +20,13 @@ const ThemeChanger = () => {
     if (theme === "dark") {
       setTheme("light");
       setIsDark(false);
-      localStorage.setItem("imeditor-theme", "light");
+      localStorage.setItem("theme", "light");
       document.documentElement.setAttribute("data-theme", "light");
       document.documentElement.classList.remove("dark");
     } else {
       setTheme("dark");
       setIsDark(true);
-      localStorage.setItem("imeditor-theme", "dark");
+      localStorage.setItem("theme", "dark");
       document.documentElement.setAttribute("data-theme", "dark");
       document.documentElement.classList.add("dark");
     }
@@ -36,13 +36,13 @@ const ThemeChanger = () => {
     if (isDark) {
       setTheme("dark");
       setIsDark(true);
-      localStorage.setItem("imeditor-theme", "dark");
+      localStorage.setItem("theme", "dark");
       document.documentElement.setAttribute("data-theme", "dark");
       document.documentElement.classList.add("dark");
     } else {
       setTheme("light");
       setIsDark(false);
-      localStorage.setItem("imeditor-theme", "light");
+      localStorage.setItem("theme", "light");
       document.documentElement.setAttribute("data-theme", "light");
       document.documentElement.classList.remove("dark");
     }

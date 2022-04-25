@@ -32,13 +32,21 @@ const Main = () => {
           className="w-full h-full flex items-center justify-center"
         >
           {!initialized && !loading && (
-            <h3
-              onClick={() => initializeMap({})}
-              className="px-4 text-3xl text-center cursor-pointer text-gray-400 hover:text-white transition-all duration-200"
-            >
-              Your map will appear here, <br />
-              Click here to initialize a default one to play with
-            </h3>
+            <div className="flex flex-col">
+              <h3 className="p-4 text-2xl text-center text-gray-400">
+                Your map will appear here
+              </h3>
+              <label onClick={() => initializeMap({})} className="btn btn-lg">
+                Try with demo image
+              </label>
+              <div className="divider text-gray-400">Or</div>
+              <label
+                htmlFor="manage-image-modal"
+                className="btn btn-lg btn-accent"
+              >
+                Upload your own image
+              </label>
+            </div>
           )}
           {loading && (
             <h3 className="px-4 text-3xl text-center text-gray-400">

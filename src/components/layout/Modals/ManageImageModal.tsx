@@ -86,6 +86,13 @@ const ManageImageModal = () => {
             Warning: By updating your image your geoJSON will be removed, please
             export your geoJSON to avoid data loss.
           </p>
+          {preppedImageURL?.startsWith("blob:") && (
+            <p className="text-sm text-grey-300 my-4">
+              Warning: Uploaded images cannot be saved locally (for automatic
+              session rehydration) as they can be a security and memory risk,
+              please upload the image again if need be
+            </p>
+          )}
           <input
             type="text"
             placeholder="URL"

@@ -10,7 +10,7 @@ const Header = () => {
   return (
     <header className="header items-center p-4 bg-neutral text-neutral-content">
       <div className="flex justify-between w-full items-center">
-        <div className="flex-1 font-bold text-xl">IMEditor</div>
+        <div className="flex-1 font-bold text-xl">Jelly - Image Map Editor</div>
         {mapTainted ? (
           <div
             className="tooltip tooltip-warning tooltip-bottom z-[1000]"
@@ -172,7 +172,7 @@ const Header = () => {
             </label>
             <ul
               tabIndex={0}
-              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+              className="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-box w-52"
               style={{ zIndex: 1000 }}
             >
               <li>

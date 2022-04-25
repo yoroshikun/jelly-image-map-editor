@@ -1,7 +1,6 @@
 {
-  "name": "imeditor",
-  "private": true,
-  "version": "0.1.0",
+  "name": "jelly-leaflet-image-editor",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
