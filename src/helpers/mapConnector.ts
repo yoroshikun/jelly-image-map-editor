@@ -1,5 +1,5 @@
 // Series of helpers that connect native map js to store
-import { Map, geoJSON, Layer, LatLng } from "leaflet";
+import { Map, geoJSON, Layer, LatLng, Circle, Marker } from "leaflet";
 import { GeoJsonObject } from "geojson";
 
 import type { Item, GeomanExtraLayerProps } from "../store/types";
@@ -45,12 +45,14 @@ const makeItem = (shape: string, layer: Layer & GeomanExtraLayerProps) => {
       break;
     case "CircleMarker":
     case "Marker":
+    case "Point":
       newItem.geometry = {
         type: shape,
         coordinates: latlngObjectToArray(layer._latlng!),
       };
       break;
     case "Line":
+    case "LineString":
       newItem.geometry = {
         type: shape,
         coordinates: latlngObjectToArray(layer._latlngs!),
@@ -62,7 +64,15 @@ const makeItem = (shape: string, layer: Layer & GeomanExtraLayerProps) => {
 
 // Actions
 const addGeoJSON = (map: Map, geoJson: GeoJsonObject) => {
-  const geoJSONLayer = geoJSON(geoJson).addTo(map);
+  const geoJSONLayer = geoJSON(geoJson, {
+    pointToLayer: (feature, latlng) => {
+      if (feature.properties.radius) {
+        return new Circle(latlng, feature.properties.radius);
+      } else {
+        return new Marker(latlng);
+      }
+    },
+  }).addTo(map);
 
   // Get all created shapes and add them to the list
   (geoJSONLayer.getLayers() as (Layer & GeomanExtraLayerProps)[]).forEach(
