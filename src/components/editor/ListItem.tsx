@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { selectListItem } from "../../store/main";
-import type { Item } from "../../store/types";
+import { useEffect, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { selectListItem } from '../../store/main';
+import type { Item } from '../../store/types';
 
 type Properties = {
   [key: string]: {
@@ -9,6 +9,22 @@ type Properties = {
     value: string | number;
     type: string;
   }[];
+};
+
+const isObject = (value: any) => {
+  const v = value.toString();
+  if (
+    v === 'true' ||
+    v === 'false' ||
+    v === 'null' ||
+    v === 'undefined' ||
+    v === 'NaN' ||
+    v.startsWith('{') ||
+    v.startsWith('[')
+  ) {
+    return true;
+  }
+  return false;
 };
 
 const ListItem = ({
@@ -29,8 +45,15 @@ const ListItem = ({
     // Register default fields, we dont want to show any map only editable fields
     defaultValues: {
       [`list-item-properties-${item.id}`]: Object.entries(item.properties)
-        .filter(([key]) => key !== "radius")
-        .map(([key, value]) => ({ key, value, type: typeof value })),
+        .filter(([key]) => key !== 'radius')
+        .map(([key, value]) => ({
+          key,
+          value,
+          type:
+            isObject(value)
+              ? 'object'
+              : typeof value,
+        })),
     },
   });
   const { fields, append, remove, move } = useFieldArray({
@@ -43,7 +66,13 @@ const ListItem = ({
       ...item,
       properties: {
         ...data[`list-item-properties-${item.id}`].reduce(
-          (prev, curr) => ({ ...prev, [curr.key]: curr.value }),
+          (prev, curr) => ({
+            ...prev,
+            [curr.key]:
+              curr.type === 'object'
+                ? JSON.parse(curr.value.toString())
+                : curr.value,
+          }),
           {}
         ),
         radius: item.properties.radius,
@@ -65,14 +94,14 @@ const ListItem = ({
   return (
     <div
       className={`card bg-base-300 shadow-xl ${
-        selected && "border-2 border-accent col-span-3"
+        selected && 'border-2 border-accent col-span-3'
       }`}
       onClick={() => selectListItem(item.id)}
     >
       <div
         tabIndex={0}
         className={`collapse collapse-arrow ${
-          selected ? "collapse-open" : "collapse-close"
+          selected ? 'collapse-open' : 'collapse-close'
         }`}
       >
         <div className="collapse-title text-sm font-medium flex justify-between">
@@ -96,8 +125,8 @@ const ListItem = ({
                         className={`input input-bordered w-full ${
                           errors?.[`list-item-properties-${item.id}`]?.[index]
                             ?.key
-                            ? "input-error"
-                            : ""
+                            ? 'input-error'
+                            : ''
                         }
                     `}
                         {...register(
@@ -110,13 +139,13 @@ const ListItem = ({
                     </div>
                     <div className="flex-1 mx-1">
                       <input
-                        type={type === "number" ? "number" : "text"}
+                        type={type === 'number' ? 'number' : 'text'}
                         placeholder="value"
                         className={`input input-bordered w-full ${
                           errors?.[`list-item-properties-${item.id}`]?.[index]
                             ?.value
-                            ? "input-error"
-                            : ""
+                            ? 'input-error'
+                            : ''
                         }
                     `}
                         {...register(
@@ -130,7 +159,7 @@ const ListItem = ({
                     <div className="divider divider-horizontal"></div>
                     <button
                       className="btn btn-square btn-error"
-                      disabled={key === "radius"}
+                      disabled={key === 'radius'}
                       onClick={() => remove(index)}
                     >
                       <svg
@@ -163,7 +192,7 @@ const ListItem = ({
                     <li>
                       <a
                         onClick={() =>
-                          append({ key: "", value: "", type: "string" })
+                          append({ key: '', value: '', type: 'string' })
                         }
                       >
                         String
@@ -172,10 +201,19 @@ const ListItem = ({
                     <li>
                       <a
                         onClick={() =>
-                          append({ key: "", value: "", type: "number" })
+                          append({ key: '', value: '', type: 'number' })
                         }
                       >
                         Number
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        onClick={() =>
+                          append({ key: '', value: '', type: 'object' })
+                        }
+                      >
+                        Object
                       </a>
                     </li>
                   </ul>
@@ -185,7 +223,7 @@ const ListItem = ({
                 tabIndex={1}
                 onClick={() => setCoordsOpen(!coodsOpen)}
                 className={`collapse bg-base-100 mb-4 rounded-lg ${
-                  coodsOpen ? "collapse-open" : "collapse-close"
+                  coodsOpen ? 'collapse-open' : 'collapse-close'
                 }`}
               >
                 <div className="collapse-title text-md font-medium">
