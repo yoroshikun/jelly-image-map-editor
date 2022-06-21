@@ -1,6 +1,7 @@
 import { GeoJsonObject } from "geojson";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { useMapStore } from "../../../store/main";
 import initializeMap from "../../../helpers/initializeMap";
 import { addGeoJSON } from "../../../helpers/mapConnector";
 // @ts-ignore
@@ -50,7 +51,8 @@ const ImportModal = () => {
   const handleImport = useCallback(async () => {
     try {
       if (preppedGeoJSON) {
-        const map = await initializeMap({});
+        const options = useMapStore.getState().options;
+        const map = await initializeMap(options);
         addGeoJSON(map, preppedGeoJSON);
       }
     } catch (error: any) {
